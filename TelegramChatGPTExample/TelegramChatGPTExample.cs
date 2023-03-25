@@ -138,6 +138,14 @@ namespace TelegramChatGPTExample
                         Text = "Allowed dialogue length exceeded, press (Re)start in the menu (left striped button) to start a new dialogue."
                     });
                 }
+                else
+                {
+                    _ = Bot.SendMessage(new SendMessage
+                    {
+                        ChatId = chatId,
+                        Text = $"An error has occured: {exception.Message}"
+                    });
+                }
             }
         }
 
