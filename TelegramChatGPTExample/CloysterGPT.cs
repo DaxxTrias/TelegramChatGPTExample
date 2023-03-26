@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace CloysterGPT
 {
     internal class APIUsageException : Exception
@@ -40,15 +41,9 @@ namespace CloysterGPT
 
     internal static class CloysterGPT
     {
-        #region vars
+        #region variables for control
         const long maxUniqueVisitors = 15;  // Restriction to prevent users sharing
         const string groupChatPrefix = "!gpt"; // Prefix for a message in a group chat to allow the bot to distinguish between a message that should be treated as a question and side talks.
-        #endregion
-
-        #region keys
-        const long adminId = 0; // Place your chatId here to enable admin commands
-        const string botId = "0";
-        const string OpenAIkey = "0";
         #endregion
 
         public static RxTelegram.Bot.TelegramBot Bot;
@@ -62,9 +57,9 @@ namespace CloysterGPT
             Console.InputEncoding = Encoding.Unicode;
 
             visitors = new ConcurrentDictionary<long, Visitor>();
-            Bot = new RxTelegram.Bot.TelegramBot(botId);
+            Bot = new RxTelegram.Bot.TelegramBot(appsettings.botId);
             contextByChats = new ConcurrentDictionary<long, AIChatContext>();
-            AI = new OpenAIAPI(OpenAIkey);
+            AI = new OpenAIAPI(appsettings.OpenAIkey);
         }
 
         public static async Task Main()
@@ -158,7 +153,7 @@ namespace CloysterGPT
 
         public static bool IsAdmin(Message message)
         {
-            return message.Chat.Id == adminId;
+            return message.Chat.Id == appsettings.adminId;
         }
 
         private static bool HasAccess(Message message, long chatId)
