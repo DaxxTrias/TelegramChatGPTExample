@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TelegramChatGPTExample
+namespace CloysterGPT
 {
     internal static class CommandProcessor
     {
@@ -37,17 +37,17 @@ namespace TelegramChatGPTExample
 
         private static void ShowVisitors(Message message)
         {
-            if (!TelegramChatGPTExample.IsAdmin(message))
+            if (!CloysterGPT.IsAdmin(message))
                 return;
 
             var chatId = message.Chat.Id;
-            var data = TelegramChatGPTExample.visitors.ToList();
+            var data = CloysterGPT.visitors.ToList();
             string vis = "Visitors:\n";
             foreach (var item in data)
             {
                 vis += $"`{item.Key}` - {item.Value.who}:{item.Value.access}\n";
             }
-            _ = TelegramChatGPTExample.Bot.SendMessage(new SendMessage
+            _ = CloysterGPT.Bot.SendMessage(new SendMessage
             {
                 ChatId = chatId,
                 Text = vis
@@ -56,29 +56,29 @@ namespace TelegramChatGPTExample
 
         private static void AddAccess(Message message)
         {
-            if (!TelegramChatGPTExample.IsAdmin(message))
+            if (!CloysterGPT.IsAdmin(message))
                 return;
 
-            _ = TelegramChatGPTExample.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => { Visitor arg = new(true, "Unknown"); return arg; }, (long id, Visitor arg) => { arg.access = true; return arg; });
+            _ = CloysterGPT.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => { Visitor arg = new(true, "Unknown"); return arg; }, (long id, Visitor arg) => { arg.access = true; return arg; });
             ShowVisitors(message);
         }
 
         private static void DelAccess(Message message)
         {
-            if (!TelegramChatGPTExample.IsAdmin(message))
+            if (!CloysterGPT.IsAdmin(message))
                 return;
 
-            _ = TelegramChatGPTExample.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => { Visitor arg = new(false, "Unknown"); return arg; }, (long id, Visitor arg) => { arg.access = false; return arg; });
+            _ = CloysterGPT.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => { Visitor arg = new(false, "Unknown"); return arg; }, (long id, Visitor arg) => { arg.access = false; return arg; });
             ShowVisitors(message);
         }
 
         private static void ClearMemoryCommand(Message message)
         {
             var chatId = message.Chat.Id;
-            var chatContext = TelegramChatGPTExample.contextByChats[chatId];
+            var chatContext = CloysterGPT.contextByChats[chatId];
             chatContext.ReInitialize();
 
-            _ = TelegramChatGPTExample.Bot.SendMessage(new SendMessage
+            _ = CloysterGPT.Bot.SendMessage(new SendMessage
             {
                 ChatId = chatId,
                 Text = "The dialogue is cleared for AI"

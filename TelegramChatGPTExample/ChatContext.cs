@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace TelegramChatGPTExample
+namespace CloysterGPT
 {
     internal class AIChatContext
     {

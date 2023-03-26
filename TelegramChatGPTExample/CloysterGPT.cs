@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TelegramChatGPTExample
+namespace CloysterGPT
 {
     internal class APIUsageException : Exception
     {
@@ -38,26 +38,33 @@ namespace TelegramChatGPTExample
         }
     }
 
-    internal static class TelegramChatGPTExample
+    internal static class CloysterGPT
     {
+        #region vars
         const long maxUniqueVisitors = 15;  // Restriction to prevent users sharing
-        const long adminId = 0;             // Place your chatId here to enable admin commands
-        const string groupChatPrefix = "-"; // Prefix for a message in a group chat to allow the bot to distinguish between a message that should be treated as a question and side talks.
+        const string groupChatPrefix = "!gpt"; // Prefix for a message in a group chat to allow the bot to distinguish between a message that should be treated as a question and side talks.
+        #endregion
+
+        #region keys
+        const long adminId = 0; // Place your chatId here to enable admin commands
+        const string botId = "0";
+        const string OpenAIkey = "0";
+        #endregion
 
         public static RxTelegram.Bot.TelegramBot Bot;
         internal static ConcurrentDictionary<long, Visitor> visitors;
         internal static ConcurrentDictionary<long, AIChatContext> contextByChats;
         private static OpenAIAPI AI { get; set; }
 
-        static TelegramChatGPTExample()
+        static CloysterGPT()
         {
             Console.OutputEncoding = Encoding.Unicode;
             Console.InputEncoding = Encoding.Unicode;
 
             visitors = new ConcurrentDictionary<long, Visitor>();
-            Bot = new RxTelegram.Bot.TelegramBot("PLACE TELEGRAM BOT TOKEN HERE");
+            Bot = new RxTelegram.Bot.TelegramBot(botId);
             contextByChats = new ConcurrentDictionary<long, AIChatContext>();
-            AI = new OpenAIAPI("PLACE OPENAI API KEY HERE");
+            AI = new OpenAIAPI(OpenAIkey);
         }
 
         public static async Task Main()
