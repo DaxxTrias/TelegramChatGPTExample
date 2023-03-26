@@ -42,7 +42,7 @@ namespace CloysterGPT
     internal static class CloysterGPT
     {
         #region variables for control
-        const long maxUniqueVisitors = 15;  // Restriction to prevent users sharing
+        const long maxUniqueVisitors = 14;  // Restriction to prevent users sharing
         const string groupChatPrefix = "!gpt"; // Prefix for a message in a group chat to allow the bot to distinguish between a message that should be treated as a question and side talks.
         #endregion
 
