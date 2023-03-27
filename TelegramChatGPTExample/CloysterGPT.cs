@@ -71,11 +71,11 @@ namespace CloysterGPT
         private static async Task Run(int attempt = 0)
         {
             var me = await Bot.GetMe();
-            Console.WriteLine($"Bot name: @{me.Username}");
+            Utils.WriteLine($"Bot name: @{me.Username}");
 
             var messageListener = Bot.Updates.Message.Subscribe(HandleMessage, exception =>
             {
-                Console.WriteLine($"An error has occured: {exception.Message}");
+                Utils.WriteLine($"An error has occured: {exception.Message}");
                 
                 //todo: add some logic in here to detirmine if it was just a blip in internet. don't just auto terminate immediately
             });
@@ -128,6 +128,7 @@ namespace CloysterGPT
                         _ = chatContext.conversationSemaphore.Release();
                     }
 
+                    Utils.WriteLine("GPT Response Triggered");
                     _ = Bot.SendMessage(new SendMessage
                     {
                         ChatId = chatId,
@@ -140,7 +141,7 @@ namespace CloysterGPT
                 var contextLimitTag = "This model's maximum context length is";
                 if (exception.Message.Contains(contextLimitTag))
                 {
-                    Console.WriteLine("The max context length has been reached");
+                    Utils.WriteLine("GPT's max context length has been reached");
                     _ = Bot.SendMessage(new SendMessage
                     {
                         ChatId = chatId,

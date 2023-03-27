@@ -36,9 +36,9 @@ namespace CloysterGPT
             }
         }
 
-        private void Initialize(Conversation newConversation)
+        private static void Initialize(Conversation newConversation)
         {
-            Console.WriteLine("New conversation thread initiated");
+            Utils.WriteLine("New GPT conversation thread initiated");
             newConversation.AppendSystemMessage($"{DateTime.Now}");
             // newConversation.AppendExampleChatbotOutput($"Place facts and desired behaviour here");
         }

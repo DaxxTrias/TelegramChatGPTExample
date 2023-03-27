@@ -10,7 +10,7 @@ namespace CloysterGPT
 {
     public class UrbanDictionary
     {
-        // Disable the warning.
+        // Disable the warning. https://learn.microsoft.com/en-us/dotnet/fundamentals/syslib-diagnostics/syslib0014
 #pragma warning disable SYSLIB0014
         private static string Http(string endpoint)
         {

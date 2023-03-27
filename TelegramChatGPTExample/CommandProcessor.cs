@@ -23,7 +23,7 @@ namespace CloysterGPT
                 commandPair.Value(message);
 
                 //todo: stop using tostrings idiot
-                Console.WriteLine("Command Response sent: ");
+                Utils.WriteLine("Command Response triggered: ");
 
                 return true;
             }
@@ -82,7 +82,7 @@ namespace CloysterGPT
             if (!CloysterGPT.IsAdmin(message))
                 return;
 
-            Console.WriteLine("I am a test");
+            Utils.WriteLine("Test command triggered");
         }
 
         private static void ClearMemoryCommand(Message message)
