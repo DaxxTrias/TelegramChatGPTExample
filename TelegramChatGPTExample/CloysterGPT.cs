@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace CloysterGPT
 {
     internal class APIUsageException : Exception
@@ -46,10 +45,12 @@ namespace CloysterGPT
         const string groupChatPrefix = "!gpt"; // Prefix for a message in a group chat to allow the bot to distinguish between a message that should be treated as a question and side talks.
         #endregion
 
+        #region initializers
         public static RxTelegram.Bot.TelegramBot Bot;
         internal static ConcurrentDictionary<long, Visitor> visitors;
         internal static ConcurrentDictionary<long, AIChatContext> contextByChats;
         private static OpenAIAPI AI { get; set; }
+        #endregion
 
         static CloysterGPT()
         {
@@ -75,6 +76,8 @@ namespace CloysterGPT
             var messageListener = Bot.Updates.Message.Subscribe(HandleMessage, exception =>
             {
                 Console.WriteLine($"An error has occured: {exception.Message}");
+                
+                //todo: add some logic in here to detirmine if it was just a blip in internet. don't just auto terminate immediately
             });
 
             _ = Console.ReadLine();
@@ -105,11 +108,14 @@ namespace CloysterGPT
 
                 bool isPersonalChat = chatId == message.From.Id;
                 bool isExplicitAICall = !isPersonalChat && message.Text.StartsWith(groupChatPrefix);
+
+                //todo: authorize the testing channel with aru as admin
                 if (isPersonalChat || isExplicitAICall)
                 {
                     var chatContext = contextByChats.GetOrAdd(chatId, new AIChatContext());
                     await chatContext.conversationSemaphore.WaitAsync();
                     string response = "";
+
                     try
                     {
                         var conversation = chatContext.GetConversation(() => { return AI.Chat.CreateConversation(); });
@@ -134,6 +140,7 @@ namespace CloysterGPT
                 var contextLimitTag = "This model's maximum context length is";
                 if (exception.Message.Contains(contextLimitTag))
                 {
+                    Console.WriteLine("The max context length has been reached");
                     _ = Bot.SendMessage(new SendMessage
                     {
                         ChatId = chatId,

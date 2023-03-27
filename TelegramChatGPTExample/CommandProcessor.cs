@@ -21,6 +21,10 @@ namespace CloysterGPT
             {
                 message.Text = message.Text[commandPair.Key.Length..];
                 commandPair.Value(message);
+
+                //todo: stop using tostrings idiot
+                Console.WriteLine("Command Response sent: ");
+
                 return true;
             }
 
@@ -33,6 +37,7 @@ namespace CloysterGPT
             commands.Add("/vis", ShowVisitors);
             commands.Add("/add", AddAccess);
             commands.Add("/del", DelAccess);
+            commands.Add("/test", Test);
         }
 
         private static void ShowVisitors(Message message)
@@ -70,6 +75,14 @@ namespace CloysterGPT
 
             _ = CloysterGPT.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => { Visitor arg = new(false, "Unknown"); return arg; }, (long id, Visitor arg) => { arg.access = false; return arg; });
             ShowVisitors(message);
+        }
+
+        private static void Test(Message message)
+        {
+            if (!CloysterGPT.IsAdmin(message))
+                return;
+
+            Console.WriteLine("I am a test");
         }
 
         private static void ClearMemoryCommand(Message message)
