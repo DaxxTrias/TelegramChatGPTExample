@@ -17,7 +17,7 @@ namespace CloysterGPT
             RegisterCommands();
         }
 
-        /* 
+        /* Unit test
         [Test]
         public void ExecuteIfAICommand_StartsWithCommand_ReturnsTrue()
         {
@@ -191,5 +191,52 @@ namespace CloysterGPT
                 Text = "The dialogue is cleared for GPT"
             }).ConfigureAwait(false);
         }
+
+        /* WIP Refactor
+        private static void AddAccess(Message message)
+        {
+            if (!CloysterGPT.IsAdmin(message))
+                return;
+
+            string[] args = message.Text.Split(" ");
+            if (args.Length != 3)
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = message.Chat.Id,
+                    Text = "Invalid input format. Usage: /add <user_id> <true/false>"
+                });
+                return;
+            }
+
+            if (!long.TryParse(args[1], out long id))
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = message.Chat.Id,
+                    Text = $"Invalid user id: {args[1]}"
+                });
+                return;
+            }
+
+            if (!bool.TryParse(args[2], out bool access))
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = message.Chat.Id,
+                    Text = $"Invalid access value: {args[2]}. Please enter true or false."
+                });
+                return;
+            }
+
+            _ = CloysterGPT.visitors.AddOrUpdate(id, (long id) => new Visitor(access, "Unknown"), (long id, Visitor arg) =>
+            {
+                arg.access = access;
+                return arg;
+            });
+
+            ShowVisitors(message);
+        }
+        */
     }
 }
