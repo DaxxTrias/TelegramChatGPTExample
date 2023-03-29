@@ -14,7 +14,7 @@ namespace CloysterGPT
 #pragma warning disable SYSLIB0014
         private static string Http(string endpoint)
         {
-            //todo: re-do this as asyn httpclient (chatgpt has the example in #coding mar-26-23)
+            //todo: re-do this as async httpclient (chatgpt has the example in #coding mar-26-23)
             try
             {
                 HttpWebRequest client = (HttpWebRequest)WebRequest.Create($"https://api.urbandictionary.com/v0/{endpoint}");
@@ -89,17 +89,17 @@ namespace CloysterGPT
     }
     public class Response
     {
-        public string definition { get; set; }
-        public string permalink { get; set; }
-        public int thumbs_up { get; set; }
-        public List<string> sound_urls { get; set; }
-        public string author { get; set; }
-        public string word { get; set; }
-        public int defid { get; set; }
-        public string current_vote { get; set; }
-        public string written_on { get; set; }
-        public string example { get; set; }
-        public int thumbs_down { get; set; }
+        public string definition { get; private set; }
+        public string permalink { get; private set; }
+        public int thumbs_up { get; private set; }
+        public List<string> sound_urls { get; private set; }
+        public string author { get; private set; }
+        public string word { get; private set; }
+        public int defid { get; private set; }
+        public string current_vote { get; private set; }
+        public string written_on { get; private set; }
+        public string example { get; private set; }
+        public int thumbs_down { get; private set; }
     }
     public class BaseResponse
     {

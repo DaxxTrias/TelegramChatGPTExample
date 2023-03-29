@@ -8,7 +8,7 @@ namespace CloysterGPT
 {
     internal class Utils
     {
-        internal static bool WriteLine(string input)
+        internal static bool WriteLine(string input, int level = 0)
         {
             try
             {
@@ -16,14 +16,16 @@ namespace CloysterGPT
                 {
                     string sb = $"{DateTime.Now}: " + input;
                     Console.WriteLine(sb);
+
                     return true;
                 }
                 else
                     return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //todo: surely we dont need to capture the exception?
+                Console.WriteLine("Exception occured: " + ex.Message + " loglevel: " + level.ToString());
+
                 return false;
             }
         }

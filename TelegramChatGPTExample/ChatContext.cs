@@ -6,10 +6,11 @@ namespace CloysterGPT
 {
     internal class AIChatContext
     {
+        #region vars
         private Conversation conversation;
         private Func<Conversation> conversationFactory;
-
         public SemaphoreSlim conversationSemaphore = new(1, 1);
+        #endregion
 
         public Conversation GetConversation(Func<Conversation> conversationFactory)
         {
@@ -38,6 +39,7 @@ namespace CloysterGPT
 
         private static void Initialize(Conversation newConversation)
         {
+            //todo: include an indicator here, such as the message/group id. cut it off though to avoid dox.
             Utils.WriteLine("New GPT conversation thread initiated");
             newConversation.AppendSystemMessage($"{DateTime.Now}");
             // newConversation.AppendExampleChatbotOutput($"Place facts and desired behaviour here");
