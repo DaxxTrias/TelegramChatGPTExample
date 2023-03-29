@@ -26,6 +26,12 @@ namespace CloysterGPT
         public async void ReInitialize()
         {
             _ = Interlocked.Exchange(ref conversation, conversationFactory());
+            if (conversation == null)
+            {
+                Utils.WriteLine("Failed to initialize conversation thread");
+                return;
+            }
+
             await conversationSemaphore.WaitAsync().ConfigureAwait(false);
             try
             {

@@ -12,7 +12,7 @@ namespace CloysterGPT
         {
             try
             {
-                if (input?.Length > 0)
+                if (!string.IsNullOrEmpty(input))
                 {
                     string sb = $"{DateTime.Now}: " + input;
                     Console.WriteLine(sb);

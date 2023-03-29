@@ -34,15 +34,15 @@ namespace CloysterGPT
         public static bool ExecuteIfAICommand(Message message)
         {
             tmpcmd = string.Empty;
-            if (message.Text.StartsWith("/"))
+            if (message?.Text?.StartsWith("/") == true)
             {
                 tmpcmd = message.Text.Split(' ')[0];
             }
 
-            foreach (var commandPair in commands.Where((value) => message.Text.Trim().StartsWith(value.Key)))
+            foreach (var commandPair in commands.Where((value) => message?.Text?.Trim().StartsWith(value.Key) == true))
             {
                 message.Text = message.Text[commandPair.Key.Length..];
-                commandPair.Value(message);
+                commandPair.Value?.Invoke(message);
 
                 //todo: stop using tostrings idiot
                 Utils.WriteLine("Command Response triggered: " + tmpcmd);
@@ -50,7 +50,6 @@ namespace CloysterGPT
 
                 return true;
             }
-
             return false;
         }
 
@@ -90,15 +89,28 @@ namespace CloysterGPT
             var chatId = message.Chat.Id;
             var data = CloysterGPT.visitors.ToList();
             string vis = "Visitors:\n";
+
             foreach (var item in data)
             {
                 vis += $"`{item.Key}` - {item.Value.who}:{item.Value.access}\n";
             }
-            _ = CloysterGPT.Bot.SendMessage(new SendMessage
+
+            if (CloysterGPT.visitors.Count > 0)
             {
-                ChatId = chatId,
-                Text = vis
-            }).ConfigureAwait(false);
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = chatId,
+                    Text = vis
+                }).ConfigureAwait(false);
+            }
+            else
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = chatId,
+                    Text = "No visitors currently"
+                }).ConfigureAwait(false);
+            }
         }
 
         private static void AddAccess(Message message)
@@ -106,11 +118,28 @@ namespace CloysterGPT
             if (!CloysterGPT.IsAdmin(message))
                 return;
 
-            _ = CloysterGPT.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => 
-                { Visitor arg = new(true, "Unknown"); return arg; }, (long id, Visitor arg) => 
-                    { arg.access = true; return arg; });
+            if (long.TryParse(message.Text, out var chatId))
+            {
+                _ = CloysterGPT.visitors.AddOrUpdate(chatId, (long id) =>
+                {
+                    Visitor arg = new(true, "Unknown");
+                    return arg;
+                }, (long id, Visitor arg) =>
+                {
+                    arg.access = true;
+                    return arg;
+                });
 
-            ShowVisitors(message);
+                ShowVisitors(message);
+            }
+            else
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = message.Chat.Id,
+                    Text = "Invalid visitor ID format. Please enter a valid visitor ID."
+                }).ConfigureAwait(false);
+            }
         }
 
         private static void DelAccess(Message message)
@@ -118,11 +147,28 @@ namespace CloysterGPT
             if (!CloysterGPT.IsAdmin(message))
                 return;
 
-            _ = CloysterGPT.visitors.AddOrUpdate(long.Parse(message.Text), (long id) => 
-                { Visitor arg = new(false, "Unknown"); return arg; }, (long id, Visitor arg) => 
-                    { arg.access = false; return arg; });
+            if (long.TryParse(message.Text, out var chatId))
+            {
+                _ = CloysterGPT.visitors.AddOrUpdate(chatId, (long id) =>
+                {
+                    Visitor arg = new(false, "Unknown");
+                    return arg;
+                }, (long id, Visitor arg) =>
+                {
+                    arg.access = false;
+                    return arg;
+                });
 
-            ShowVisitors(message);
+                ShowVisitors(message);
+            }
+            else
+            {
+                _ = CloysterGPT.Bot.SendMessage(new SendMessage
+                {
+                    ChatId = message.Chat.Id,
+                    Text = "Invalid visitor ID format. Please enter a valid visitor ID."
+                }).ConfigureAwait(false);
+            }
         }
 
         private static void TestCommand(Message message)
