@@ -63,6 +63,8 @@ namespace CloysterGPT
             commands.Add("/del", DelAccess);
             commands.Add("/test", TestCommand);
             commands.Add("/contact", ContactDetails);
+            commands.Add("/ud", UrbanSearch);
+            //todo: add /help
         }
 
         private static void ContactDetails(Message message)
@@ -169,6 +171,14 @@ namespace CloysterGPT
                     Text = "Invalid visitor ID format. Please enter a valid visitor ID."
                 }).ConfigureAwait(false);
             }
+        }
+
+        private static void UrbanSearch(Message message)
+        {
+            if (!CloysterGPT.IsAdmin(message))
+                return;
+
+            Utils.WriteLine("UD Search triggered.");
         }
 
         private static void TestCommand(Message message)

@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CloysterGPT
 {
@@ -30,8 +27,14 @@ namespace CloysterGPT
 
                 return response;
             }
-            catch (Exception)
+            catch (WebException ex)
             {
+                Utils.WriteLine("WebException ocurred" + ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Utils.WriteLine("Exception ocurred" + ex.Message);
                 return null;
             }
         }
@@ -54,9 +57,14 @@ namespace CloysterGPT
 
                 return new List<Response>(baseResponse.list);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
-                //todo: handle it
+                Utils.WriteLine("Exception occurred: " + ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Utils.WriteLine("Exception occurred: " + ex.Message);
                 return null;
             }
         }
