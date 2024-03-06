@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>12</LangVersion>
     <UserSecretsId>bfa8fcfe-62ea-4ac3-879b-1838ed979a1a</UserSecretsId>
   </PropertyGroup>
 
@@ -19,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenAI" Version="1.6.0" />
+    <PackageReference Include="OpenAI" Version="1.10.0" />
     <PackageReference Include="RxTelegram.Bot" Version="6.5.0" />
     <PackageReference Include="System.Reactive.Core" Version="5.0.0" />
   </ItemGroup>

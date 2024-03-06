@@ -109,7 +109,7 @@ namespace CloysterGPT
                     {
                         var conversation = chatContext.GetConversation(() => { return AI.Chat.CreateConversation(); });
                         conversation.AppendMessage(new ChatMessage(ChatMessageRole.User, message.Text));
-                        response = await conversation.GetResponseFromChatbot();
+                        response = await conversation.GetResponseFromChatbotAsync();
 
                     }
                     finally
